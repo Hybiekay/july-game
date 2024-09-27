@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 void main() {
   runApp(const MyApp());
@@ -33,6 +34,26 @@ class _GameScreenState extends State<GameScreen> {
   int player = 1;
   int computer = 2;
   List board = List.filled(9, 0);
+  Timer? _timer;
+  int time = 60;
+
+  startTime() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (time > 0) {
+        setState(() {
+          time--;
+        });
+      } else {
+        timer.cancel();
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    startTime();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +62,25 @@ class _GameScreenState extends State<GameScreen> {
         backgroundColor: Colors.amber,
         leading: Container(
           alignment: Alignment.center,
-          child: const Text(
-            "60",
-            style: TextStyle(fontSize: 20),
+          child: Text(
+            "$time",
+            style: const TextStyle(fontSize: 20),
           ),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.pause)),
+          IconButton(
+              onPressed: () {
+                if (_timer != null && !_timer!.isActive) {
+                  startTime();
+                } else {
+                  setState(() {
+                    _timer?.cancel();
+                  });
+                }
+              },
+              icon: Icon(_timer != null && _timer!.isActive
+                  ? Icons.pause
+                  : Icons.play_arrow)),
           IconButton(
               onPressed: () {
                 setState(() {
