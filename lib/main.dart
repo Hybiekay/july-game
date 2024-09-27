@@ -83,9 +83,12 @@ class _GameScreenState extends State<GameScreen> {
                   : Icons.play_arrow)),
           IconButton(
               onPressed: () {
+                _timer?.cancel();
                 setState(() {
                   board = List.filled(9, 0);
+                  time = 60;
                 });
+                startTime();
               },
               icon: const Icon(Icons.lock_reset_rounded))
         ],
