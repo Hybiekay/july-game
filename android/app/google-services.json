@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "656459667832",
+    "project_id": "julygame-6c3ed",
+    "storage_bucket": "julygame-6c3ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656459667832:android:7db4771fefec54b519d08d",
+        "android_client_info": {
+          "package_name": "com.example.julygame"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyCBhlgV0wfd5fiqHE0CPRkaznkUeRghA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
