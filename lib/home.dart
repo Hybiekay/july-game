@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -9,7 +10,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Future login() async {
-    showDialog(context: context, builder: (context) => const SignUpLoginDialog());
+    showDialog(
+        context: context, builder: (context) => const SignUpLoginDialog());
   }
 
   @override
@@ -67,7 +69,37 @@ class SignUpLoginDialog extends StatefulWidget {
 }
 
 class _SignUpLoginDialogState extends State<SignUpLoginDialog> {
-  bool islogin = false;
+  bool isloginPage = false;
+  final firebaseAuth = FirebaseAuth.instance;
+
+  final _formKey = GlobalKey<FormState>();
+
+  TextEditingController emailcontroller = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  Future login() async {
+    try {
+      await firebaseAuth.signInWithEmailAndPassword(
+          email: emailcontroller.text.trim(),
+          password: passwordController.text.trim());
+    } on FirebaseAuthException catch (e) {
+      print("Error ${e.message}");
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text(e.toString()),
+      //   backgroundColor: Colors.red,
+      // ));
+    }
+  }
+
+  Future registerUser() async {
+    try {
+      await firebaseAuth.createUserWithEmailAndPassword(
+          email: emailcontroller.text.trim(),
+          password: passwordController.text.trim());
+    } on FirebaseAuthException catch (error) {
+      print("Error ${error.message}");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +116,7 @@ class _SignUpLoginDialogState extends State<SignUpLoginDialog> {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      islogin = true;
+                      isloginPage = true;
                     });
                   },
                   child: Container(
@@ -93,7 +125,7 @@ class _SignUpLoginDialogState extends State<SignUpLoginDialog> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        color: islogin ? Colors.amber : Colors.white,
+                        color: isloginPage ? Colors.amber : Colors.white,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.amber)),
                     child: const Text(
@@ -107,7 +139,7 @@ class _SignUpLoginDialogState extends State<SignUpLoginDialog> {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      islogin = false;
+                      isloginPage = false;
                     });
                   },
                   child: Container(
@@ -116,7 +148,7 @@ class _SignUpLoginDialogState extends State<SignUpLoginDialog> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        color: islogin ? Colors.white : Colors.amber,
+                        color: isloginPage ? Colors.white : Colors.amber,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.amber)),
                     child: const Text(
@@ -130,71 +162,109 @@ class _SignUpLoginDialogState extends State<SignUpLoginDialog> {
               ],
             ),
             20.toHeightSize(),
-            islogin
+            isloginPage
                 ? Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: "Enter your Emaill",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            controller: emailcontroller,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Email Is required";
+                              } else if (!value.contains("@") &&
+                                  !value.trim().contains(" ")) {
+                                return "Enter a valid Email";
+                              } else {
+                                return null;
+                              }
+                            },
+                            decoration: InputDecoration(
+                              hintText: "Enter your Emaill",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
                           ),
-                        ),
-                        10.toHeightSize(),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: "Enter your Password",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                          10.toHeightSize(),
+                          TextFormField(
+                            controller: passwordController,
+                            decoration: InputDecoration(
+                              hintText: "Enter your Password",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
                           ),
-                        ),
-                        15.toHeightSize(),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.amber,
-                              fixedSize: const Size(200, 40)),
-                          onPressed: () {},
-                          child: const Text("Login"),
-                        ),
-                        20.toHeightSize(),
-                      ],
+                          15.toHeightSize(),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.amber,
+                                fixedSize: const Size(200, 40)),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                login();
+                              }
+                            },
+                            child: const Text("Login"),
+                          ),
+                          20.toHeightSize(),
+                        ],
+                      ),
                     ),
                   )
                 : Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: "Enter your Emaill",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            controller: emailcontroller,
+                            validator: (value) {
+                              if (value == null || value == "") {
+                                return "Email Is required";
+                              } else if (!value.contains("@") &&
+                                  !value.contains(".")) {
+                                return "Enter a valid Email";
+                              } else {
+                                return null;
+                              }
+                            },
+                            decoration: InputDecoration(
+                              hintText: "Enter your Emaill",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
                           ),
-                        ),
-                        10.toHeightSize(),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: "Enter your Password",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                          10.toHeightSize(),
+                          TextFormField(
+                            controller: passwordController,
+                            decoration: InputDecoration(
+                              hintText: "Enter your Password",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
                           ),
-                        ),
-                        15.toHeightSize(),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.amber,
-                              fixedSize: const Size(200, 40)),
-                          onPressed: () {},
-                          child: const Text("Sign Up"),
-                        ),
-                        20.toHeightSize(),
-                      ],
+                          15.toHeightSize(),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.amber,
+                                fixedSize: const Size(200, 40)),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                registerUser();
+                              }
+                            },
+                            child: const Text("Sign Up"),
+                          ),
+                          20.toHeightSize(),
+                        ],
+                      ),
                     ),
                   ),
             const Row(
@@ -218,6 +288,7 @@ class _SignUpLoginDialogState extends State<SignUpLoginDialog> {
               onPressed: () {},
               label: const Text("Sign Up with Google"),
               icon: const FlutterLogo(),
+              iconAlignment: IconAlignment.start,
             ),
           ],
         ),

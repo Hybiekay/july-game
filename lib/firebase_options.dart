@@ -63,6 +63,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '656459667832',
     projectId: 'julygame-6c3ed',
     storageBucket: 'julygame-6c3ed.appspot.com',
+    androidClientId: '656459667832-pmcmsp5v72jbqo8if1m06gtbra56vg22.apps.googleusercontent.com',
+    iosClientId: '656459667832-rovbcgmrpmqvonm9ecblre6himj32dl6.apps.googleusercontent.com',
     iosBundleId: 'com.example.julygame',
   );
+
 }

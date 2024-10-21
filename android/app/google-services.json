@@ -12,7 +12,20 @@
           "package_name": "com.example.julygame"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "656459667832-pmcmsp5v72jbqo8if1m06gtbra56vg22.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.julygame",
+            "certificate_hash": "d958acb00848dd98be255719243bbfbd48fe4828"
+          }
+        },
+        {
+          "client_id": "656459667832-8aap2k7h6llgi9qlbavr6qck1dsbk6o0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAyCBhlgV0wfd5fiqHE0CPRkaznkUeRghA"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "656459667832-8aap2k7h6llgi9qlbavr6qck1dsbk6o0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "656459667832-rovbcgmrpmqvonm9ecblre6himj32dl6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.julygame"
+              }
+            }
+          ]
         }
       }
     }
